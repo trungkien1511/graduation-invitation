@@ -1,0 +1,172 @@
+@import "tailwindcss";
+/* Google Fonts được load qua <link> trong index.html với subset=vietnamese */
+
+/* ─── Scroll-reveal animation ─────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tất cả section bắt đầu ẩn (trừ khi đã có class .visible) */
+section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.5s cubic-bezier(0.25, 0.95, 0.4, 1),
+    transform 0.5s cubic-bezier(0.25, 0.95, 0.4, 1);
+}
+
+/* Khi section vào viewport → thêm .visible → hiện ra */
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Page Fade-In ────────────────────────────────────────────── */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#root {
+  animation: pageFadeIn 0.4s ease-out;
+}
+
+/* ─── Hover effects (Nhẹ nhàng, không máy móc) ───────────────── */
+button,
+a {
+  transition: opacity 0.2s ease !important;
+  cursor: pointer;
+}
+
+button:hover,
+a:hover {
+  opacity: 0.82 !important;
+  transform: none !important; /* KHÔNG translateY hay scale */
+}
+
+/* ─── Guestbook card hover (Chỉ border và background, rất nhẹ) ── */
+.guestbook-card {
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.guestbook-card:hover {
+  background-color: rgba(12, 40, 98, 0.03) !important;
+  border-color: rgba(12, 40, 98, 0.25) !important;
+}
+
+/* Scrollbar mỏng cho message list trong guestbook */
+#guestbook .overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+#guestbook .overflow-y-auto::-webkit-scrollbar-track {
+  background: transparent;
+}
+#guestbook .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(12, 40, 98, 0.18);
+  border-radius: 99px;
+}
+#guestbook .overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: rgba(12, 40, 98, 0.32);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* scroll-behavior chuyển sang .app-container để tránh conflict */
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #fffefc;
+  /* Font stack ưu tiên hỗ trợ tiếng Việt */
+  font-family:
+    "Inter", "Segoe UI", "Noto Sans", "Roboto", "Helvetica Neue", Arial,
+    sans-serif;
+  /* Render ligatures & diacritics đúng cách */
+  text-rendering: optimizeLegibility;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1;
+}
+
+/* ─── Scroll Snap Container ───────────────────────────────── */
+/* scroll-snap-type, overflow-y, scroll-behavior → Tailwind xử lý */
+.app-container {
+  -webkit-overflow-scrolling: touch; /* momentum scroll trên iOS */
+}
+
+/* section luôn chiếm đúng 1 viewport – scroll snap không bị lệch */
+section {
+  height: 100vh; /* chính xác 100vh, không thừa */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto; /* nội dung dài (guestbook) vẫn scroll được */
+}
+
+/* Tránh letter-spacing làm vỡ ký tự tổ hợp tiếng Việt */
+:lang(vi) {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* Thin scrollbar – áp dụng trên .app-container (scroll container thực) */
+.app-container::-webkit-scrollbar {
+  width: 5px;
+}
+.app-container::-webkit-scrollbar-track {
+  background: #fffefc;
+}
+.app-container::-webkit-scrollbar-thumb {
+  background: rgba(12, 40, 98, 0.2);
+  border-radius: 99px;
+}
+.app-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(12, 40, 98, 0.35);
+}
+
+/* Focus rings */
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(12, 40, 98, 0.4);
+  outline-offset: 2px;
+}
+
+/* ─── Motorcycle ride across screen ──────────────────────────── */
+@keyframes rideAcross {
+  from {
+    transform: translateX(-220px);
+  }
+  to {
+    transform: translateX(calc(100vw + 220px));
+  }
+}
+
+.motorcycle-ride {
+  animation: rideAcross 3s linear forwards;
+}
