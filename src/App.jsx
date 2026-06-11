@@ -129,7 +129,7 @@ function CountdownUnit({ value, label }) {
   return (
     <div className="flex flex-col items-center">
       <div
-        className="text-4xl sm:text-5xl font-bold tabular-nums w-20 sm:w-24 py-4 rounded-2xl flex items-center justify-center"
+        className="text-2xl sm:text-4xl font-bold tabular-nums w-14 sm:w-24 py-3 sm:py-4 rounded-xl sm:rounded-2xl flex items-center justify-center"
         style={{
           color: BRAND.primary,
           background: "rgba(12,40,98,0.07)",
@@ -140,7 +140,7 @@ function CountdownUnit({ value, label }) {
         {String(value).padStart(2, "0")}
       </div>
       <span
-        className="mt-2 text-xs tracking-widest uppercase"
+        className="mt-1 sm:mt-2 text-[10px] sm:text-xs tracking-widest uppercase"
         style={{ color: BRAND.primary, opacity: 0.6 }}
       >
         {label}
@@ -322,10 +322,10 @@ function CalendarSection() {
       className="px-4 snap-start"
       style={{ background: BRAND.bg }}
     >
-      <div className="max-w-2xl mx-auto w-full py-4 sm:py-12">
+      <div className="max-w-2xl mx-auto w-full py-3 sm:py-10">
         {/* Title */}
         <h2
-          className="text-center text-3xl sm:text-4xl font-bold mb-2 tracking-wide"
+          className="text-center text-2xl sm:text-4xl font-bold mb-1 sm:mb-2 tracking-wide"
           style={{
             color: BRAND.primary,
             fontFamily: "'Playfair Display', Georgia, serif",
@@ -334,13 +334,13 @@ function CalendarSection() {
           Thời gian
         </h2>
         <div
-          className="mx-auto mb-6 h-px w-24"
+          className="mx-auto mb-3 sm:mb-6 h-px w-16 sm:w-24"
           style={{ background: BRAND.primary, opacity: 0.3 }}
         />
 
         {/* Ngày giờ sự kiện */}
         <p
-          className="text-center text-sm sm:text-base mb-4 sm:mb-8 tracking-wide"
+          className="text-center text-xs sm:text-base mb-3 sm:mb-8 tracking-wide"
           style={{
             color: BRAND.primary,
             opacity: 0.65,
@@ -352,22 +352,22 @@ function CalendarSection() {
 
         {/* Calendar */}
         <div
-          className="rounded-2xl p-4 sm:p-6 mb-8 sm:mb-10 overflow-x-auto"
+          className="rounded-xl sm:rounded-2xl p-3 sm:p-6 mb-4 sm:mb-8 overflow-x-auto"
           style={{ border: `1.5px solid ${BRAND.border}` }}
         >
           <p
-            className="text-center text-sm font-semibold tracking-widest mb-4"
+            className="text-center text-xs sm:text-sm font-semibold tracking-widest mb-2 sm:mb-4"
             style={{ color: BRAND.primary, opacity: 0.55 }}
           >
             {monthName}
           </p>
-          <table className="w-full min-w-[280px] border-collapse">
+          <table className="w-full min-w-[260px] border-collapse">
             <thead>
               <tr>
                 {dayLabels.map((d) => (
                   <th
                     key={d}
-                    className="pb-3 text-center text-xs font-semibold tracking-wider"
+                    className="pb-2 sm:pb-3 text-center text-[10px] sm:text-xs font-semibold tracking-wider"
                     style={{ color: BRAND.primary, opacity: 0.45 }}
                   >
                     {d}
@@ -384,12 +384,12 @@ function CalendarSection() {
                     return (
                       <td
                         key={di}
-                        className="text-center py-2 text-sm"
+                        className="text-center py-1 sm:py-2 text-xs sm:text-sm"
                         style={{ color: BRAND.primary }}
                       >
                         {day && (
                           <span
-                            className={`inline-flex items-center justify-center w-8 h-8 rounded-full transition-all ${isTarget
+                            className={`inline-flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full transition-all ${isTarget
                               ? "font-bold text-white"
                               : "hover:opacity-70"
                               }`}
@@ -411,12 +411,12 @@ function CalendarSection() {
 
         {/* Countdown */}
         <p
-          className="text-center text-xs tracking-widest uppercase mb-4 sm:mb-6"
+          className="text-center text-[10px] sm:text-xs tracking-widest uppercase mb-2 sm:mb-4"
           style={{ color: BRAND.primary, opacity: 0.5 }}
         >
           Đếm ngược đến sự kiện
         </p>
-        <div className="flex justify-center gap-4 sm:gap-6">
+        <div className="flex justify-center gap-3 sm:gap-6">
           <CountdownUnit value={countdown.days} label="Ngày" />
           <CountdownUnit value={countdown.hours} label="Giờ" />
           <CountdownUnit value={countdown.minutes} label="Phút" />
@@ -456,9 +456,9 @@ function LocationSection() {
       className="px-4 snap-start relative"
       style={{ background: "#f5f0e8" }}
     >
-      <div className="max-w-2xl mx-auto w-full py-4 sm:py-8 z-10 relative">
+      <div className="max-w-2xl mx-auto w-full py-3 sm:py-8 z-10 relative">
         <h2
-          className="text-center text-3xl sm:text-4xl font-bold mb-2 tracking-wide"
+          className="text-center text-2xl sm:text-4xl font-bold mb-1 sm:mb-2 tracking-wide"
           style={{
             color: BRAND.primary,
             fontFamily: "'Playfair Display', Georgia, serif",
@@ -467,12 +467,12 @@ function LocationSection() {
           Địa điểm
         </h2>
         <div
-          className="mx-auto mb-4 sm:mb-6 h-px w-24"
+          className="mx-auto mb-3 sm:mb-6 h-px w-16 sm:w-24"
           style={{ background: BRAND.primary, opacity: 0.3 }}
         />
 
         <div
-          className="rounded-2xl p-4 sm:p-6"
+          className="rounded-xl sm:rounded-2xl p-3 sm:p-6"
           style={{
             background: BRAND.bg,
             border: `1.5px solid ${BRAND.border}`,
@@ -480,7 +480,7 @@ function LocationSection() {
         >
           {/* Location name */}
           <p
-            className="text-2xl font-bold mb-1"
+            className="text-lg sm:text-2xl font-bold mb-0.5 sm:mb-1"
             style={{
               color: BRAND.primary,
               fontFamily: "'Playfair Display', Georgia, serif",
@@ -489,7 +489,7 @@ function LocationSection() {
             {CONFIG.locationName}
           </p>
           <p
-            className="text-sm mb-4"
+            className="text-xs sm:text-sm mb-3 sm:mb-4"
             style={{ color: BRAND.primary, opacity: 0.65 }}
           >
             {CONFIG.address}
@@ -497,7 +497,7 @@ function LocationSection() {
 
           {/* Google Maps embed */}
           <div
-            className="w-full rounded-xl overflow-hidden mb-4 sm:mb-5 h-[190px] sm:h-[280px]"
+            className="w-full rounded-xl overflow-hidden mb-3 sm:mb-5 h-[155px] sm:h-[280px]"
             style={{
               border: `1px solid ${BRAND.border}`,
               boxShadow: "0 8px 24px rgba(12, 40, 98, 0.08)"
@@ -520,7 +520,7 @@ function LocationSection() {
             href={CONFIG.mapLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block px-6 py-2.5 rounded-full text-sm font-semibold tracking-wide"
+            className="inline-block px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide"
             style={{
               color: BRAND.bg,
               background: BRAND.primary,
@@ -535,19 +535,19 @@ function LocationSection() {
       {/* Motorcycle animation – Chạy xuôi ở dưới */}
       <div
         className="absolute bottom-0 left-0 w-full overflow-hidden pointer-events-none"
-        style={{ height: 160 }}
+        style={{ height: 100 }}
       >
         {rideKey > 0 && (
           <div
             key={rideKey}
             className="motorcycle-ride"
-            style={{ display: "inline-block", width: 220 }}
+            style={{ display: "inline-block", width: 160 }}
           >
             <DotLottieReact
               src="/motor cycle.lottie"
               autoplay
               loop={false}
-              style={{ width: 220, height: 160 }}
+              style={{ width: 160, height: 100 }}
             />
           </div>
         )}
@@ -556,7 +556,7 @@ function LocationSection() {
       {/* Car animation – Chạy ngược ở trên */}
       <div
         className="absolute top-0 left-0 w-full overflow-hidden pointer-events-none"
-        style={{ height: 160 }}
+        style={{ height: 100 }}
       >
         {rideKey > 0 && (
           <div
@@ -564,7 +564,7 @@ function LocationSection() {
             className="motorcycle-ride"
             style={{
               display: "inline-block",
-              width: 220,
+              width: 160,
               animationDirection: "reverse"
             }}
           >
@@ -573,7 +573,7 @@ function LocationSection() {
                 src="/49847160-3f53-11ef-8109-cbcc69139eb2.lottie"
                 autoplay
                 loop={false}
-                style={{ width: 220, height: 160 }}
+                style={{ width: 160, height: 100 }}
               />
             </div>
           </div>
@@ -693,26 +693,26 @@ function GuestbookSection() {
         🎉 Gửi lời chúc thành công!
       </div>
 
-      <div className="max-w-5xl mx-auto w-full h-full flex flex-col md:flex-row gap-5 px-4 py-5 sm:py-8">
+      <div className="max-w-5xl mx-auto w-full h-full flex flex-col md:flex-row gap-3 sm:gap-5 px-4 py-3 sm:py-8">
 
         {/* ── LEFT: Form gửi lời chúc ── */}
-        <div className="md:w-80 flex-shrink-0 flex flex-col gap-4">
+        <div className="md:w-80 flex-shrink-0 flex flex-col gap-2 sm:gap-4">
           {/* Tiêu đề */}
           <div>
             <h2
-              className="text-2xl sm:text-3xl font-bold tracking-wide"
+              className="text-xl sm:text-3xl font-bold tracking-wide"
               style={{ color: BRAND.primary, fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               Nói gì thì nói đi anh em
             </h2>
-            <div className="mt-2 h-px w-12" style={{ background: BRAND.primary, opacity: 0.2 }} />
-            <p className="mt-2 text-xs leading-relaxed" style={{ color: BRAND.primary, opacity: 0.45 }}>
+            <div className="mt-1 sm:mt-2 h-px w-12" style={{ background: BRAND.primary, opacity: 0.2 }} />
+            <p className="mt-1 text-[11px] sm:text-xs leading-relaxed" style={{ color: BRAND.primary, opacity: 0.45 }}>
               Mỗi lời chúc là một kỷ niệm đẹp 🌸
             </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:gap-3">
             {/* Tên */}
             <div>
               <label
