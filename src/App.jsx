@@ -15,7 +15,7 @@ const CONFIG = {
 
   // ─── Sự kiện & Địa điểm ──────────────────────────────────
   eventName: "GRADUATION PARTY",
-  locationName: "Đại học Duy Tân - Hòa Khánh Nam",
+  locationName: "Tòa nhà G - Đại học Duy Tân, Hòa Khánh Nam",
   address: "120 Hoàng Minh Thảo, Hòa Khánh, Đà Nẵng",
   mapLink: "https://maps.app.goo.gl/grmMacdM3TXAi5m47",
 
@@ -338,17 +338,26 @@ function CalendarSection() {
           style={{ background: BRAND.primary, opacity: 0.3 }}
         />
 
-        {/* Ngày giờ sự kiện */}
-        <p
-          className="text-center text-xs sm:text-base mb-3 sm:mb-8 tracking-wide"
-          style={{
-            color: BRAND.primary,
-            opacity: 0.65,
-            fontFamily: "'Inter', 'Segoe UI', sans-serif",
-          }}
-        >
-          {formatEventDate(CONFIG.targetDate)}
-        </p>
+        {/* Event time badge */}
+        <div className="flex items-center justify-center mb-3 sm:mb-8">
+          <div
+            className="flex items-center gap-2 px-5 py-2 rounded-full"
+            style={{
+              background: "rgba(12,40,98,0.06)",
+              border: `1.5px solid ${BRAND.border}`,
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: BRAND.primary, opacity: 0.6 }}>
+              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span
+              className="text-xs sm:text-sm font-semibold tracking-wide"
+              style={{ color: BRAND.primary }}
+            >
+              09:00 – Buổi sáng
+            </span>
+          </div>
+        </div>
 
         {/* Calendar */}
         <div
@@ -411,7 +420,7 @@ function CalendarSection() {
 
         {/* Countdown */}
         <p
-          className="text-center text-[10px] sm:text-xs tracking-widest uppercase mb-2 sm:mb-4"
+          className="text-center text-xs tracking-widest uppercase mb-6"
           style={{ color: BRAND.primary, opacity: 0.5 }}
         >
           Đếm ngược đến sự kiện
@@ -467,7 +476,7 @@ function LocationSection() {
           Địa điểm
         </h2>
         <div
-          className="mx-auto mb-3 sm:mb-6 h-px w-16 sm:w-24"
+          className="mx-auto mb-6 h-px w-24"
           style={{ background: BRAND.primary, opacity: 0.3 }}
         />
 
@@ -497,7 +506,7 @@ function LocationSection() {
 
           {/* Google Maps embed */}
           <div
-            className="w-full rounded-xl overflow-hidden mb-3 sm:mb-5 h-[155px] sm:h-[280px]"
+            className="w-full rounded-xl overflow-hidden mb-4 sm:mb-5 h-[220px] sm:h-[280px]"
             style={{
               border: `1px solid ${BRAND.border}`,
               boxShadow: "0 8px 24px rgba(12, 40, 98, 0.08)"
