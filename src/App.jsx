@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { FiPhone, FiMessageCircle, FiFacebook, FiVolume2, FiVolumeX, FiChevronUp, FiChevronDown } from "react-icons/fi";
+import { SiZalo, SiFacebook } from "react-icons/si";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { supabase } from "./lib/supabase";
 import msgIllust from "./assets/message-app-illustration-svg-download-png-9910075.webp";
@@ -803,13 +804,13 @@ function ContactSection() {
       href: `tel:${CONFIG.contact.phone}`,
     },
     {
-      icon: <FiMessageCircle size={20} color={BRAND.primary} />,
+      icon: <SiZalo size={20} color="#0068FF" />,
       label: "Zalo",
       text: "Nhắn tin Zalo",
       href: CONFIG.contact.zalo,
     },
     {
-      icon: <FiFacebook size={20} color={BRAND.primary} />,
+      icon: <SiFacebook size={20} color="#1877F2" />,
       label: "Facebook",
       text: "Nhắn tin Messenger",
       href: CONFIG.contact.facebook,
