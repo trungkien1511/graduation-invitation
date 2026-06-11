@@ -15,7 +15,7 @@ const CONFIG = {
 
   // ─── Sự kiện & Địa điểm ──────────────────────────────────
   eventName: "GRADUATION PARTY",
-  locationName: "XEM DẪN ĐƯỜNG",
+  locationName: "Đại học Duy Tân - Hòa Khánh Nam",
   address: "120 Hoàng Minh Thảo, Hòa Khánh, Đà Nẵng",
   mapLink: "https://maps.app.goo.gl/grmMacdM3TXAi5m47",
 
