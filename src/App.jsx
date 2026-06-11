@@ -23,12 +23,6 @@ const CONFIG = {
   calendarYear: 2026,
   calendarMonth: 5, // 0-indexed: 5 = tháng 6
 
-  // ─── Lời chúc mẫu ────────────────────────────────────────
-  defaultMessages: [
-    { name: "Ngô Thị Minh", message: "Chúc mừng tốt nghiệp nhé! 🎓" },
-    { name: "Ngô Tâm", message: "Tự hào về bạn ❤️" },
-    { name: "Ngô Minh", message: "Cố gắng nhé! Tương lai rực rỡ đang chờ 🌟" },
-  ],
 
   // ─── Footer ──────────────────────────────────────────────
   footerMessage:
@@ -553,7 +547,7 @@ function LocationSection() {
         )}
       </div>
 
-      {/* Motorcycle animation – Chạy ngược ở trên */}
+      {/* Car animation – Chạy ngược ở trên */}
       <div
         className="absolute top-0 left-0 w-full overflow-hidden pointer-events-none"
         style={{ height: 160 }}
@@ -570,7 +564,7 @@ function LocationSection() {
           >
             <div style={{ transform: "scaleX(-1)" }}>
               <DotLottieReact
-                src="/motor cycle.lottie"
+                src="/49847160-3f53-11ef-8109-cbcc69139eb2.lottie"
                 autoplay
                 loop={false}
                 style={{ width: 220, height: 160 }}
@@ -589,6 +583,8 @@ function GuestbookSection() {
   const [submitted, setSubmitted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const [errors, setErrors] = useState({});
 
   // Fetch initial messages and set up realtime subscription
   useEffect(() => {
@@ -613,35 +609,34 @@ function GuestbookSection() {
       .channel('guestbook_changes')
       .on(
         'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'guestbook'
-        },
+        { event: 'INSERT', schema: 'public', table: 'guestbook' },
         (payload) => {
           setMessages((currentMessages) => [payload.new, ...currentMessages]);
         }
       )
       .subscribe();
 
-    return () => {
-      supabase.removeChannel(subscription);
-    };
+    return () => { supabase.removeChannel(subscription); };
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name.trim() || !message.trim()) return;
-
+    // Validate
+    const newErrors = {};
+    if (!name.trim()) newErrors.name = "Bạn chưa nhập tên 😢";
+    if (!message.trim()) newErrors.message = "Viết gì đó được không nào 😬";
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    if (isSending) return;
+    setErrors({});
     const newMessage = { name: name.trim(), message: message.trim() };
-
-    // Insert into Supabase (optimistic update is handled by the subscription, but we wait for insert)
-    const { error } = await supabase
-      .from('guestbook')
-      .insert([newMessage]);
+    const { error } = await supabase.from('guestbook').insert([newMessage]);
 
     if (error) {
       console.error("Error inserting message:", error);
+      setIsSending(false);
       return;
     }
 
@@ -649,14 +644,23 @@ function GuestbookSection() {
     setMessage("");
     setSubmitted(true);
     setShowConfetti(true);
+    setIsSending(false);
     setTimeout(() => setSubmitted(false), 3000);
     setTimeout(() => setShowConfetti(false), 3000);
+  };
+
+  const EMOJIS = ["🎓", "🎉", "🥂", "💐", "🌟", "❤️", "🙌", "✨"];
+
+  const formatTime = (ts) => {
+    if (!ts) return "";
+    const d = new Date(ts);
+    return `${d.getDate()}/${d.getMonth() + 1} ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
   };
 
   return (
     <section
       id="guestbook"
-      className="px-4 snap-start relative"
+      className="snap-start relative overflow-hidden"
       style={{ background: BRAND.bg }}
     >
       {showConfetti && (
@@ -669,126 +673,181 @@ function GuestbookSection() {
           />
         </div>
       )}
-      {/* Layout: flex column – toàn bộ nằm trong 100vh */}
-      <div className="max-w-2xl mx-auto w-full h-full flex flex-col py-6 sm:py-8">
-        {/* ── Tiêu đề (thu nhỏ trên mobile) ── */}
-        <h2
-          className="text-center text-2xl sm:text-3xl font-bold mb-1 tracking-wide flex-shrink-0"
-          style={{
-            color: BRAND.primary,
-            fontFamily: "'Playfair Display', Georgia, serif",
-          }}
-        >
-          Gửi lời chúc
-        </h2>
-        <div
-          className="mx-auto mb-4 h-px w-16 flex-shrink-0"
-          style={{ background: BRAND.primary, opacity: 0.3 }}
-        />
 
-        {/* ── Form (cố định, không co) ── */}
-        <form
-          onSubmit={handleSubmit}
-          className="rounded-xl p-4 mb-4 space-y-3 flex-shrink-0"
-          style={{ border: `1.5px solid ${BRAND.border}` }}
-        >
-          {/* Tên + lời chúc nằm ngang trên sm+ để tiết kiệm chiều cao */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1">
+      {/* Toast notification */}
+      <div
+        className="fixed top-5 left-1/2 -translate-x-1/2 z-40 px-5 py-2.5 rounded-full text-sm font-medium shadow-lg pointer-events-none transition-all duration-500"
+        style={{
+          background: BRAND.primary,
+          color: BRAND.bg,
+          opacity: submitted ? 1 : 0,
+          transform: submitted ? "translate(-50%, 0)" : "translate(-50%, -12px)",
+        }}
+      >
+        🎉 Gửi lời chúc thành công!
+      </div>
+
+      <div className="max-w-5xl mx-auto w-full h-full flex flex-col md:flex-row gap-5 px-4 py-5 sm:py-8">
+
+        {/* ── LEFT: Form gửi lời chúc ── */}
+        <div className="md:w-80 flex-shrink-0 flex flex-col gap-4">
+          {/* Tiêu đề */}
+          <div>
+            <h2
+              className="text-2xl sm:text-3xl font-bold tracking-wide"
+              style={{ color: BRAND.primary, fontFamily: "'Playfair Display', Georgia, serif" }}
+            >
+              Nói gì thì nói đi anh em
+            </h2>
+            <div className="mt-2 h-px w-12" style={{ background: BRAND.primary, opacity: 0.2 }} />
+            <p className="mt-2 text-xs leading-relaxed" style={{ color: BRAND.primary, opacity: 0.45 }}>
+              Mỗi lời chúc là một kỷ niệm đẹp 🌸
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            {/* Tên */}
+            <div>
               <label
                 htmlFor="guestbook-name"
-                className="block text-xs tracking-widest uppercase mb-1 font-semibold"
-                style={{ color: BRAND.primary, opacity: 0.6 }}
+                className="block text-[10px] tracking-[0.15em] uppercase font-bold mb-1.5"
+                style={{ color: BRAND.primary, opacity: 0.5 }}
               >
-                Tên
+                Tên của bạn
               </label>
               <input
                 id="guestbook-name"
                 type="text"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Tên của bạn ạ"
-                className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+                onChange={(e) => { setName(e.target.value); if (errors.name) setErrors((prev) => ({ ...prev, name: undefined })); }}
+                placeholder="Bạn tên là gì nhỉ?"
+                className="w-full px-4 py-2.5 rounded-xl text-sm outline-none"
                 style={{
                   color: BRAND.primary,
-                  background: "rgba(12,40,98,0.04)",
-                  border: `1.5px solid ${BRAND.border}`,
+                  background: errors.name ? "rgba(220,38,38,0.04)" : "rgba(12,40,98,0.04)",
+                  border: `1.5px solid ${errors.name ? "#ef4444" : BRAND.border}`,
+                  transition: "border-color 0.2s"
                 }}
               />
+              {errors.name && (
+                <p className="mt-1 text-[11px] font-medium" style={{ color: "#ef4444" }}>{errors.name}</p>
+              )}
             </div>
-            <div className="flex-[2]">
+
+            {/* Lời chúc */}
+            <div>
               <label
                 htmlFor="guestbook-msg"
-                className="block text-xs tracking-widest uppercase mb-1 font-semibold"
-                style={{ color: BRAND.primary, opacity: 0.6 }}
+                className="block text-[10px] tracking-[0.15em] uppercase font-bold mb-1.5"
+                style={{ color: BRAND.primary, opacity: 0.5 }}
               >
                 Lời chúc
               </label>
-              <input
+              <textarea
                 id="guestbook-msg"
-                type="text"
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Viết lời chúc..."
-                className="w-full px-3 py-2 rounded-lg text-sm outline-none"
+                onChange={(e) => { setMessage(e.target.value); if (errors.message) setErrors((prev) => ({ ...prev, message: undefined })); }}
+                placeholder="Chúc mừng tốt nghiệp! ..."
+                rows={3}
+                className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none"
                 style={{
                   color: BRAND.primary,
-                  background: "rgba(12,40,98,0.04)",
-                  border: `1.5px solid ${BRAND.border}`,
+                  background: errors.message ? "rgba(220,38,38,0.04)" : "rgba(12,40,98,0.04)",
+                  border: `1.5px solid ${errors.message ? "#ef4444" : BRAND.border}`,
+                  lineHeight: "1.6",
+                  transition: "border-color 0.2s"
                 }}
               />
+              {errors.message && (
+                <p className="mt-1 text-[11px] font-medium" style={{ color: "#ef4444" }}>{errors.message}</p>
+              )}
             </div>
-          </div>
-          <div className="flex items-center gap-3">
+
+            {/* Emoji shortcuts */}
+            <div className="flex gap-1.5 flex-wrap">
+              {EMOJIS.map((em) => (
+                <button
+                  key={em}
+                  type="button"
+                  onClick={() => setMessage((prev) => prev + em)}
+                  className="w-8 h-8 rounded-lg text-base flex items-center justify-center hover:opacity-80 transition-opacity"
+                  style={{ background: "rgba(12,40,98,0.05)", border: `1px solid ${BRAND.border}` }}
+                >
+                  {em}
+                </button>
+              ))}
+            </div>
+
+            {/* Submit */}
             <button
               type="submit"
-              className="px-6 py-2 rounded-full font-semibold text-sm tracking-wide flex-shrink-0"
+              disabled={isSending}
+              className="w-full py-2.5 rounded-xl font-semibold text-sm tracking-wide transition-opacity disabled:opacity-40"
               style={{ background: BRAND.primary, color: BRAND.bg }}
             >
-              Gửi lời chúc
+              {isSending ? "Đang gửi..." : "Gửi lời chúc"}
             </button>
+          </form>
+        </div>
+
+        {/* ── RIGHT: Danh sách lời chúc ── */}
+        <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex items-center justify-between mb-3 flex-shrink-0">
 
           </div>
-        </form>
 
-        {/* ── Danh sách lời chúc – scroll nội bộ, không mở rộng section ── */}
-        <div
-          className="flex-1 overflow-y-auto space-y-3 pr-1"
-          style={{ minHeight: 0 }} /* quan trọng: cho phép flex child co lại */
-        >
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className="guestbook-card rounded-lg px-4 py-3 flex gap-3 items-start"
-              style={{
-                background: i === 0 ? "rgba(12,40,98,0.05)" : "transparent",
-                border: `1.5px solid ${BRAND.border}`,
-              }}
-            >
-              {/* Avatar */}
-              <div
-                className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs"
-                style={{ background: BRAND.primary, color: BRAND.bg }}
-              >
-                {m.name.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <p
-                  className="font-semibold text-sm mb-0.5"
-                  style={{ color: BRAND.primary }}
-                >
-                  {m.name}
-                </p>
-                <p
-                  className="text-sm leading-relaxed"
-                  style={{ color: BRAND.primary, opacity: 0.75 }}
-                >
-                  {m.message}
-                </p>
-              </div>
+          {isLoading ? (
+            <div className="flex-1 flex items-center justify-center">
+              <span className="text-sm" style={{ color: BRAND.primary, opacity: 0.4 }}>Đang tải...</span>
             </div>
-          ))}
+          ) : (
+            <div className="flex-1 overflow-y-auto space-y-2.5 pr-1" style={{ minHeight: 0 }}>
+              {messages.map((m, i) => (
+                <div
+                  key={i}
+                  className="guestbook-card rounded-2xl px-4 py-3.5 flex gap-3 items-start"
+                  style={{
+                    background: i === 0
+                      ? `linear-gradient(135deg, rgba(12,40,98,0.07) 0%, rgba(12,40,98,0.02) 100%)`
+                      : "rgba(12,40,98,0.02)",
+                    border: `1.5px solid ${i === 0 ? "rgba(12,40,98,0.18)" : BRAND.border}`,
+                  }}
+                >
+                  {/* Avatar chữ cái */}
+                  <div
+                    className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm"
+                    style={{
+                      background: i === 0 ? BRAND.primary : "rgba(12,40,98,0.12)",
+                      color: i === 0 ? BRAND.bg : BRAND.primary,
+                    }}
+                  >
+                    {m.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-baseline gap-2 mb-0.5">
+                      <p className="font-semibold text-sm" style={{ color: BRAND.primary }}>
+                        {m.name}
+                      </p>
+                      {m.created_at && (
+                        <span className="text-[10px] shrink-0" style={{ color: BRAND.primary, opacity: 0.35 }}>
+                          {formatTime(m.created_at)}
+                        </span>
+                      )}
+                    </div>
+                    <p
+                      className="text-sm leading-relaxed break-words"
+                      style={{ color: BRAND.primary, opacity: 0.75 }}
+                    >
+                      {m.message}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
       </div>
     </section>
   );
