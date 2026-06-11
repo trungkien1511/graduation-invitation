@@ -173,7 +173,13 @@ function formatEventDate(isoString) {
 /** Section 1 – Hero */
 function HeroSection({ guestName }) {
   const scrollToCalendar = () => {
-    document.getElementById("calendar")?.scrollIntoView({ behavior: "smooth" });
+    const container = document.querySelector(".app-container");
+    if (container) {
+      container.scrollTo({
+        top: container.clientHeight, // Calendar là section thứ 2 (index 1)
+        behavior: "smooth"
+      });
+    }
   };
 
   return (
@@ -334,7 +340,7 @@ function CalendarSection() {
 
         {/* Ngày giờ sự kiện */}
         <p
-          className="text-center text-sm sm:text-base mb-8 tracking-wide"
+          className="text-center text-sm sm:text-base mb-4 sm:mb-8 tracking-wide"
           style={{
             color: BRAND.primary,
             opacity: 0.65,
@@ -405,7 +411,7 @@ function CalendarSection() {
 
         {/* Countdown */}
         <p
-          className="text-center text-xs tracking-widest uppercase mb-6"
+          className="text-center text-xs tracking-widest uppercase mb-4 sm:mb-6"
           style={{ color: BRAND.primary, opacity: 0.5 }}
         >
           Đếm ngược đến sự kiện
@@ -461,7 +467,7 @@ function LocationSection() {
           Địa điểm
         </h2>
         <div
-          className="mx-auto mb-6 h-px w-24"
+          className="mx-auto mb-4 sm:mb-6 h-px w-24"
           style={{ background: BRAND.primary, opacity: 0.3 }}
         />
 
@@ -491,7 +497,7 @@ function LocationSection() {
 
           {/* Google Maps embed */}
           <div
-            className="w-full rounded-xl overflow-hidden mb-4 sm:mb-5 h-[220px] sm:h-[280px]"
+            className="w-full rounded-xl overflow-hidden mb-4 sm:mb-5 h-[190px] sm:h-[280px]"
             style={{
               border: `1px solid ${BRAND.border}`,
               boxShadow: "0 8px 24px rgba(12, 40, 98, 0.08)"
@@ -749,8 +755,8 @@ function GuestbookSection() {
                 value={message}
                 onChange={(e) => { setMessage(e.target.value); if (errors.message) setErrors((prev) => ({ ...prev, message: undefined })); }}
                 placeholder="Chúc mừng tốt nghiệp! ..."
-                rows={3}
-                className="w-full px-4 py-2.5 rounded-xl text-sm outline-none resize-none"
+                rows={2}
+                className="w-full px-4 py-2 sm:py-2.5 rounded-xl text-sm outline-none resize-none"
                 style={{
                   color: BRAND.primary,
                   background: errors.message ? "rgba(220,38,38,0.04)" : "rgba(12,40,98,0.04)",
@@ -765,13 +771,13 @@ function GuestbookSection() {
             </div>
 
             {/* Emoji shortcuts */}
-            <div className="flex gap-1.5 flex-wrap">
+            <div className="flex gap-1 sm:gap-1.5 flex-wrap">
               {EMOJIS.map((em) => (
                 <button
                   key={em}
                   type="button"
                   onClick={() => setMessage((prev) => prev + em)}
-                  className="w-8 h-8 rounded-lg text-base flex items-center justify-center hover:opacity-80 transition-opacity"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg text-sm sm:text-base flex items-center justify-center hover:opacity-80 transition-opacity"
                   style={{ background: "rgba(12,40,98,0.05)", border: `1px solid ${BRAND.border}` }}
                 >
                   {em}
@@ -1042,9 +1048,13 @@ function NavDots() {
   }, []);
 
   const handleClick = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    const idx = NAV_SECTIONS.findIndex((s) => s.id === id);
+    const container = document.querySelector(".app-container");
+    if (idx !== -1 && container) {
+      container.scrollTo({
+        top: idx * container.clientHeight,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -1128,9 +1138,11 @@ function MusicPlayer() {
   const scrollToSection = (idx) => {
     const clamped = Math.max(0, Math.min(NAV_SECTIONS.length - 1, idx));
     const container = document.querySelector(".app-container");
-    const el = document.getElementById(NAV_SECTIONS[clamped].id);
-    if (el && container) {
-      el.scrollIntoView({ behavior: "smooth" });
+    if (container) {
+      container.scrollTo({
+        top: clamped * container.clientHeight,
+        behavior: "smooth"
+      });
     }
   };
 
