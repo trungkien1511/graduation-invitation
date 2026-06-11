@@ -179,7 +179,7 @@ function HeroSection({ guestName }) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen w-full flex flex-col items-center justify-center px-6 snap-start"
+      className="relative w-full flex flex-col items-center justify-center px-6 snap-start"
       style={{ background: BRAND.bg }}
     >
       <div className="flex flex-col items-center text-center gap-4 sm:gap-6 w-full max-w-xl px-4 mt-[-5vh]">
@@ -1292,7 +1292,7 @@ export default function App() {
     <>
       <NavDots />
       <div
-        className="app-container h-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth"
+        className="app-container snap-y snap-mandatory overflow-y-scroll scroll-smooth"
         style={{
           fontFamily:
             "'Inter', 'Playfair Display', Georgia, system-ui, sans-serif",

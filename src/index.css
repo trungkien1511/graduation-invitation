@@ -117,12 +117,15 @@ body {
 /* ─── Scroll Snap Container ───────────────────────────────── */
 /* scroll-snap-type, overflow-y, scroll-behavior → Tailwind xử lý */
 .app-container {
+  height: 100vh;
+  height: 100dvh;
   -webkit-overflow-scrolling: touch; /* momentum scroll trên iOS */
 }
 
 /* section luôn chiếm đúng 1 viewport – scroll snap không bị lệch */
 section {
-  height: 100vh; /* chính xác 100vh, không thừa */
+  height: 100vh; /* fallback */
+  height: 100dvh; /* chính xác động theo viewport trên mobile */
   display: flex;
   flex-direction: column;
   justify-content: center;
