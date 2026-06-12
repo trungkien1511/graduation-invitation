@@ -15,9 +15,9 @@ const CONFIG = {
 
   // ─── Sự kiện & Địa điểm ──────────────────────────────────
   eventName: "GRADUATION PARTY",
-  locationName: "Tòa nhà G - Đại học Duy Tân, Hòa Khánh Nam",
-  address: "120 Hoàng Minh Thảo, Hòa Khánh, Đà Nẵng",
-  mapLink: "https://maps.app.goo.gl/grmMacdM3TXAi5m47",
+  locationName: "Hội Trường Tầng 4 - Đại học Duy Tân",
+  address: "3 Quang Trung, Hải Châu, Đà Nẵng",
+  mapLink: "https://maps.app.goo.gl/RQnQzUzpGvyd2WPu8?g_st=ic",
 
   // ─── Lịch ────────────────────────────────────────────────
   calendarYear: 2026,
